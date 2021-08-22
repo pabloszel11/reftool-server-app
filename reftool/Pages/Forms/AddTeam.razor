@@ -1,0 +1,106 @@
+﻿@page "/Forms/AddTeam"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using reftool_blazor_server.Models
+
+@inject ITeamData teamdb
+@inject IPlayerData playerdb
+
+<h2>Add Team</h2>
+
+<h4>Please provide a team name and a minimum of 5 players</h4>
+
+<EditForm Model="@newForm" OnValidSubmit="@Insert">
+    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+    <DataAnnotationsValidator />
+
+    <table class="table table-striped">
+        <tr style="display:inline">
+            <td>
+                <InputText id="teamName" @bind-Value="newForm.TeamName" />
+            </td>
+        </tr>
+
+        @foreach (var player in newForm.Players)
+        {
+            <tr style="display:inline">
+                <td style="width: 10%"><InputNumber id="playerNo" @bind-Value="player.Number" /></td>
+                <td style="width: 10%"><InputText id="playerFirstName" @bind-Value="player.FirstName" /></td>
+                <td style="width: 10%"><InputText id="playerLastName" @bind-Value="player.LastName" /></td>
+            </tr>
+        }
+    </table> 
+    <br />
+    
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+</EditForm>
+
+@if (teams is null)
+{
+    <p><em>Loading</em></p>
+}
+else
+{
+    <Table class="table">
+        <thead>
+            <tr>
+                <th>Team Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var team in teams)
+            {
+                <tr>
+                    <td>@team.TeamName</td>
+                </tr>
+            }
+        </tbody>
+    </Table>
+}
+
+
+@code
+{
+    private List<TeamModel> teams;
+    private List<TeamModel> specificTeam;
+
+    private TeamFormModel newForm = new TeamFormModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await teamdb.GetTeams();
+        //specificTeam = await teamdb.GetTeamID("Chicago Bulls");
+
+        //  Console.WriteLine(specificTeam[0].ID);
+    }
+
+    public async Task Insert()
+    {
+        TeamModel team = new TeamModel
+        {
+            TeamName = newForm.TeamName
+        };
+        await teamdb.InsertTeam(team);
+
+        specificTeam = await teamdb.GetTeamID(newForm.TeamName);
+        Console.WriteLine(specificTeam[0].TeamName);
+        int id = specificTeam[0].ID;
+        Console.WriteLine(id);
+
+        foreach (var player in newForm.Players)
+        {
+            player.TeamID = id;
+            if (player.FirstName != null && player.LastName != null)
+                await playerdb.InsertPlayer(player);
+        }
+
+        newForm = new TeamFormModel();
+    }
+}
+
+
+

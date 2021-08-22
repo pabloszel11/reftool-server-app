@@ -1,0 +1,7 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/Append.Blazor.Notifications" Path="C:\Users\C5315422\.nuget\packages\append.blazor.notifications\1.1.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise" Path="C:\Users\C5315422\.nuget\packages\blazorise\0.9.4.3\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.Bootstrap" Path="C:\Users\C5315422\.nuget\packages\blazorise.bootstrap\0.9.4.3\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Blazorise.Snackbar" Path="C:\Users\C5315422\.nuget\packages\blazorise.snackbar\0.9.4.3\build\..\staticwebassets\" />
+  <ContentRoot BasePath="/" Path="C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\scopedcss\bundle\" />
+</StaticWebAssets>

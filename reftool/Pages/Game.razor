@@ -1,0 +1,516 @@
+@page "/game"
+@using System.Diagnostics
+
+@using reftool_blazor_server.Components
+@using reftool_blazor_server.Data.Game
+@using Append.Blazor.Notifications
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using BlazorDownloadFile
+@using System.IO
+@using System.Runtime 
+@using reftool_blazor_server.Pages
+
+@inject IPlayerData playerdb
+@inject ITeamData teamdb
+
+
+<Alert @ref="myAlert" Color="Color.Danger"></Alert>
+
+@if (t1 != null && t2 != null)
+{
+<div>
+    <center>
+        <div style="position:fixed; right: 48%;">
+            <h1>@t1.Stats.Points:@t2.Stats.Points</h1>
+        </div>
+    </center>
+    <div class="table-responsive" style="display: flex">
+
+        <table class="table-dark table-striped table-sm table-condensed">
+            <caption style="caption-side: top; color: black">
+
+                <h3>@t1.Name</h3><br />
+                <h6>Fouls: </h6><Rating Color=@((t1.Stats.OverLimit()? Blazorise.Color.Danger : Blazorise.Color.Warning)) FullIcon="IconName.Circle" EmptyIcon="IconName.Circle" Disabled="true" @bind-SelectedValue="@t1.Stats.QuarterFouls" />
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 55%">Player</th>
+                    <th scope="col" style="width: 5%">Mins</th>
+                    <th scope="col" style="width: 10%">PTS</th>
+                    <th scope="col" style="width: 15%">FGM/FGA</th>
+                    <th scope="col" style="width: 15%">TPM/TPA</th>
+                    <th scope="col" style="width: 15%">FTM/FTA</th>
+                    <th scope="col" style="width: 5%">ORBS</th>
+                    <th scope="col" style="width: 5%">RBS</th>
+                    <th scope="col" style="width: 5%">ASTS</th>
+                    <th scope="col" style="width: 5%">STLS</th>
+                    <th scope="col" style="width: 5%">BLKS</th>
+                    <th scope="col" style="width: 5%">TOS</th>
+                    <th scope="col" style="width: 5%">FLS</th>
+                    <th scope="col" style="width: 5%">OFLS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @t1.Players)
+                {
+                    string color = "";
+                    @if (item.active)
+                    {
+                        color = "green";
+                    }
+                    <tr style="background-color: @color">
+                        <td class="game">
+                            #@item.Number
+                            @item.Name
+                            @item.Surname
+                            @if (!g.IsOver())
+                            {
+                                <Icon Name="item.ArrowActive()"
+                                      Class="@((g.clock.IsButtonPressed()? "timerStarted" : "timerStopped"))"
+                                      @onclick="@(() => item.SwitchActive())"></Icon>
+                            }
+                        </td>
+                        <td class="game">@item.Stats.TimeInMin()</td>
+                        <td class="game" @onclick="() => item.Stats.TwoPointer(true)">@item.Stats.Points</td>
+                        <td class="game">
+                            <Icon Name="IconName.CheckCircle" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.TwoPointer, item, true))" />
+                            @item.Stats.FGM / @item.Stats.FGA
+                            <Icon Name="IconName.Ban" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.TwoPointer, item, false))" />
+                        </td>
+                        <td class="game">
+                            <Icon Name="IconName.CheckCircle" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.ThreePointer, item, true))" />
+                            @item.Stats.TPM / @item.Stats.TPA
+                            <Icon Name="IconName.Ban" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.ThreePointer, item, false))" />
+                        </td>
+                        <td class="game">
+                            <Icon Name="IconName.CheckCircle" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.FreeThrow, item, true))" />
+                            @item.Stats.FTM / @item.Stats.FTA
+                            <Icon Name="IconName.Ban" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.FreeThrow, item, false))" />
+                        </td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Rebound, item, true))">@item.Stats.ORebounds</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Rebound, item, false))">@item.Stats.Rebounds</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Assist, item))">@item.Stats.Assists</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Steal, item))">@item.Stats.Steals</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Block, item))">@item.Stats.Blocks</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Turnover, item))">@item.Stats.Turnovers</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Foul, item, false))">@item.Stats.Fouls</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Foul, item, true))">@item.Stats.OFouls</td>
+                    </tr>
+                }
+                @for (int i = 0; i < 12 - t1.Players.Count; i++)
+                {
+                    <tr>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <table class="table-dark table-striped table-sm table-condensed">
+            <caption style="caption-side: top; color: black; text-align: right;">
+                <h3>@t2.Name</h3><br />
+                <h6>Fouls: </h6><Rating Color=@((t2.Stats.OverLimit()? Blazorise.Color.Danger : Blazorise.Color.Warning)) FullIcon="IconName.Circle" EmptyIcon="IconName.Circle" Disabled="true" @bind-SelectedValue="@t2.Stats.QuarterFouls" />
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 55%">Player</th>
+                    <th scope="col" style="width: 5%">Mins</th>
+                    <th scope="col" style="width: 10%">PTS</th>
+                    <th scope="col" style="width: 15%">FGM/FGA</th>
+                    <th scope="col" style="width: 15%">TPM/TPA</th>
+                    <th scope="col" style="width: 15%">FTM/FTA</th>
+                    <th scope="col" style="width: 10%">ORBS</th>
+                    <th scope="col" style="width: 10%">RBS</th>
+                    <th scope="col" style="width: 10%">ASTS</th>
+                    <th scope="col" style="width: 10%">STLS</th>
+                    <th scope="col" style="width: 10%">BLKS</th>
+                    <th scope="col" style="width: 10%">TOS</th>
+                    <th scope="col" style="width: 5%">FLS</th>
+                    <th scope="col" style="width: 5%">OFLS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @t2.Players)
+                {
+                    string color = "";
+                    @if (item.active)
+                    {
+                        color = "green";
+                    }
+                    <tr style="background-color: @color">
+                        <td class="game">
+                            #@item.Number
+                            @item.Name
+                            @item.Surname
+                            @if (!g.IsOver())
+                            {
+                                <Icon Name="item.ArrowActive()"
+                                      Class="@((g.clock.IsButtonPressed()? "timerStarted" : "timerStopped"))"
+                                      @onclick="@(() => item.SwitchActive())"></Icon>
+                            }
+
+                        </td>
+                        <td class="game">@item.Stats.TimeInMin()</td>
+                        <td class="game" @onclick="() => item.Stats.TwoPointer(true)">@item.Stats.Points</td>
+                        <td class="game">
+                            <Icon Name="IconName.CheckCircle" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.TwoPointer, item, true))" />
+                            @item.Stats.FGM / @item.Stats.FGA
+                            <Icon Name="IconName.Ban" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.TwoPointer, item, false))" />
+                        </td>
+                        <td class="game">
+                            <Icon Name="IconName.CheckCircle" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.ThreePointer, item, true))" />
+                            @item.Stats.TPM / @item.Stats.TPA
+                            <Icon Name="IconName.Ban" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.ThreePointer, item, false))" />
+                        </td>
+                        <td class="game">
+                            <Icon Name="IconName.CheckCircle" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.FreeThrow, item, true))" />
+                            @item.Stats.FTM / @item.Stats.FTA
+                            <Icon Name="IconName.Ban" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.FreeThrow, item, false))" />
+                        </td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Rebound, item, true))">@item.Stats.ORebounds</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Rebound, item, false))">@item.Stats.Rebounds</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Assist, item))">@item.Stats.Assists</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Steal, item))">@item.Stats.Steals</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Block, item))">@item.Stats.Blocks</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithoutBool(item.Stats.Turnover, item))">@item.Stats.Turnovers</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Foul, item, false))">@item.Stats.Fouls</td>
+                        <td class="game" @onclick="@(async () => await ShowWarningNotificationWithBool(item.Stats.Foul, item, true))">@item.Stats.OFouls</td>
+                    </tr>
+                }
+                @for (int i = 0; i < 12 - t2.Players.Count; i++)
+                {
+                    <tr>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                        <td class="game"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <center>
+        <h3>@g.GetQuarterLabel()</h3>
+
+        @if (!g.IsOver())
+        {
+            <Div>
+                <Button Disabled="@((g.clock.IsButtonPressed()? true : false))" @onclick="@(() => g.clock.IncTime(60000))"><Icon Class="timeEditIcon" Name="IconName.PlusCircle"></Icon></Button>
+                <Button Disabled="@((g.clock.IsButtonPressed()? true : false))" @onclick="@(() => g.clock.IncTime(1000))"><Icon Class="timeEditIcon" Name="IconName.PlusCircle"></Icon></Button>
+                <Button Disabled="@((g.clock.IsButtonPressed()? true : false))" @onclick="@(() => g.clock.IncTime(100))"><Icon Class="timeEditIcon" Name="IconName.PlusCircle"></Icon></Button>
+            </Div>
+            <h4>@g.clock.GetPrintTime()</h4>
+            <Div>
+                <Button Disabled="@((g.clock.IsButtonPressed()? true : false))" @onclick="@(() => g.clock.DecTime(60000))"><Icon Class="timeEditIcon" Name="IconName.MinusCircle"></Icon></Button>
+                <Button Disabled="@((g.clock.IsButtonPressed()? true : false))" @onclick="@(() => g.clock.DecTime(1000))"><Icon Class="timeEditIcon" Name="IconName.MinusCircle"></Icon></Button>
+                <Button Disabled="@((g.clock.IsButtonPressed()? true : false))" @onclick="@(() => g.clock.DecTime(100))"><Icon Class="timeEditIcon" Name="IconName.MinusCircle"></Icon></Button>
+            </Div>
+            <br />
+            <button class="btn btn-primary" @onclick="ToggleTimer">@g.clock.GetPrintState()</button>
+            <Blazorise.Bootstrap.Button disabled="@(methods.Count == 0)" @onclick="@(() => undoLastAction())" style="margin: 5px;"><Icon Name="IconName.Undo"></Icon></Blazorise.Bootstrap.Button>
+        }
+        else
+        {
+            @if (g != null)
+            {
+                <Button @onclick=@(async () => await BlazorDownloadFileService.DownloadFile("report.pdf", reftool_blazor_server.Data.ExportToPdf.GenerateReport(g), "application/pdf"))>Generate Report</Button>
+            }
+        }
+    </center>
+    
+</div>
+}
+else
+{
+    <h4>Pick Teams</h4>
+    
+
+    if (availableTeams is null)
+    {
+        <h3>Loading Teams...</h3>
+    }
+    else
+    {
+        if (sameTeams)
+        {
+            <h6 style="color: darkred">Teams cannot be the same</h6>
+        }
+
+        <Field Horizontal="true">
+            <FieldLabel ColumnSize="ColumnSize.Is1">Home Team</FieldLabel>
+            <Select @bind-SelectedValue="@homeTeamId">
+                <SelectItem Value="0" Disabled="true">Choose team</SelectItem>
+                @foreach (var team in availableTeams)
+                        {
+                    <SelectItem Value="@team.ID">@team.TeamName</SelectItem>
+                        }
+            </Select>
+        </Field>
+        <Field Horizontal="true">
+            <FieldLabel ColumnSize="ColumnSize.Is1">Away Team</FieldLabel>
+            <Select @bind-SelectedValue="@awayTeamId">
+                <SelectItem Value="0" Disabled="true">Choose team</SelectItem>
+                @foreach (var team in availableTeams)
+                        {
+                    <SelectItem Value="@team.ID">@team.TeamName</SelectItem>
+                        }
+            </Select>
+        </Field>
+        <button type="submit" class="btn btn-primary" @onclick="assignTeams">Confirm</button>
+    }
+
+}
+
+@code
+{
+    [Inject] IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+    Team t1;
+    Team t2;
+    System.Collections.Stack methods;
+    Alert myAlert;
+    TeamModel homeTeam, awayTeam;
+    int homeTeamId, awayTeamId;
+    reftool_blazor_server.Data.Game.Game g;
+    MemoryStream s;
+    List<TeamModel> availableTeams;
+    bool sameTeams;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        methods = new System.Collections.Stack();
+        sameTeams = false;
+        availableTeams = await teamdb.GetTeams();
+        if (t1 != null && t2 != null)
+            g = new reftool_blazor_server.Data.Game.Game(t1, t2);
+
+        //s = reftool_blazor_server.Data.ExportToPdf.GenerateReport(g);
+    }
+
+
+    Task OnClicked()
+    {
+        modalRef.Hide();
+
+        return Task.CompletedTask;
+    }
+
+    Modal modalRef;
+    [Inject] Append.Blazor.Notifications.INotificationService NotificationService { get; set; }
+
+
+    async Task ShowWarningNotificationWithBool(Action<bool> myMethod, Player item, bool value)
+    {
+        if (!item.active)
+        {
+            if (NotificationService.PermissionStatus != PermissionType.Granted)
+                await NotificationService.RequestPermissionAsync();
+            var options = new Append.Blazor.Notifications.NotificationOptions
+            {
+                Body = "This player is not on the floor",
+                Renotify = true, // By default a notification is not overwritten, so there can only be one.
+                Silent = true,
+                TimeOut = 2
+            };
+
+            await NotificationService.CreateAsync("Warning", options);
+        }
+        else
+        {
+            var revertMethod = typeof(RevertStats).GetMethod(myMethod.Method.Name);
+            methods.Push(new List<object>(new object[] { revertMethod, item, value }));
+            myMethod(value);
+
+            if (myMethod.Method.Name == "Foul")
+            {
+                if (g.clock.IsButtonPressed())
+                    ToggleTimer();
+                if (item.Stats.Fouls == 5)
+                {
+                    item.active = false;
+                    await ShowWarningNotification("Player has fouled out!");
+                    if (item.PlayerTeam.Stats.OverLimit())
+                        await ShowWarningNotification(String.Format("{0} are over the foul limit, free throws should be awarded", item.PlayerTeam.Name));
+
+                }
+
+            }
+        }
+
+    }
+
+    void undoLastAction()
+    {
+        List<object> action = (List<object>)methods.Pop();
+        System.Reflection.MethodInfo methodInfo = (System.Reflection.MethodInfo)action[0];
+        Player p = (Player)action[1];
+        bool value = (bool)action[2];
+
+        methodInfo.Invoke(null, new object[] { p.Stats, value });
+    }
+
+    async Task ShowWarningNotificationWithoutBool(Action myMethod, Player item)
+    {
+        if (!item.active)
+        {
+            if (NotificationService.PermissionStatus != PermissionType.Granted)
+                await NotificationService.RequestPermissionAsync();
+            var options = new Append.Blazor.Notifications.NotificationOptions
+            {
+                Body = "This player is not on the floor",
+                Renotify = true // By default a notification is not overwritten, so there can only be one.
+            };
+
+            await NotificationService.CreateAsync("Warning", options);
+        }
+        else
+        {
+            myMethod();
+        }
+
+    }
+
+    async Task ShowWarningNotification(string message)
+    {
+        if (NotificationService.PermissionStatus != PermissionType.Granted)
+            await NotificationService.RequestPermissionAsync();
+        var options = new Append.Blazor.Notifications.NotificationOptions
+        {
+            Body = message,
+            Renotify = true // By default a notification is not overwritten, so there can only be one.
+        };
+
+        await NotificationService.CreateAsync("Warning", options);
+    }
+
+
+    public static string Base64Encode(string plainText)
+    {
+        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+        return System.Convert.ToBase64String(plainTextBytes);
+    }
+
+
+    //static Team t1 = generate();
+    // static Team t2 = generate2();
+
+
+    private static System.Timers.Timer timer;
+
+
+    public async void ToggleTimer()
+    {
+        if (!g.RightAmountOfPlayers())
+        {
+            await ShowWarningNotification("The number of players on the court is not correct!");
+            return;
+        }
+
+
+        if (!g.clock.IsButtonPressed())
+        {
+            timer = new System.Timers.Timer(100);
+            timer.Elapsed += CountDownTimer;
+            timer.Enabled = true;
+            g.clock.SetButton(true);
+        }
+        else
+        {
+            timer.Enabled = false;
+            g.clock.SetButton(false);
+        }
+
+    }
+
+    public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+
+        if (g.clock.GetGameTime() > 0)
+        {
+            g.clock.DecTime(100);
+            g.IncActPlayersTime(100);
+        }
+        else
+        {
+            ToggleTimer();
+            g.incQuarter();
+            g.clock.ResetClock(g.IsOvertime());
+        }
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void iterate(int scale)
+    {
+        foreach (Player p in t1.Players)
+        {
+            if (p.active)
+                p.Stats.IncTim(scale);
+        }
+    }
+
+    public async void assignTeams()
+    {
+        if (homeTeamId == awayTeamId)
+        {
+            sameTeams = true;
+            return;
+        }
+        else
+            sameTeams = false;
+
+        List<PlayerModel> homePlayers = new List<PlayerModel>();
+        homePlayers = await playerdb.GetPlayersFromTeam(homeTeamId.ToString());
+        List<Player> homeGamePlayers = new List<Player>();
+
+
+        List<PlayerModel> awayPlayers = new List<PlayerModel>();
+        awayPlayers = await playerdb.GetPlayersFromTeam(awayTeamId.ToString());
+        List<Player> awayGamePlayers = new List<Player>();
+
+        string homeTeamName = availableTeams.Find(x => x.ID == homeTeamId).TeamName;
+        string awayTeamName = availableTeams.Find(x => x.ID == awayTeamId).TeamName;
+        t1 = new Team(homeTeamName, homeGamePlayers);
+        t2 = new Team(awayTeamName, awayGamePlayers);
+        foreach (var player in homePlayers)
+        {
+            homeGamePlayers.Add(new Player(player.Number, player.FirstName, player.LastName, t1));
+        }
+        foreach (var player in awayPlayers)
+        {
+            awayGamePlayers.Add(new Player(player.Number, player.FirstName, player.LastName, t2));
+        }
+
+        g = new reftool_blazor_server.Data.Game.Game(t1, t2);
+        await InvokeAsync(StateHasChanged);
+
+    }
+}
+
