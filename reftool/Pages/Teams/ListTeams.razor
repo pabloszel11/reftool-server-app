@@ -1,0 +1,34 @@
+﻿@page "/Teams"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using reftool_blazor_server.Models
+
+@inject ITeamData teamdb
+@inject IPlayerData playerdb
+
+@if(@teams != null )
+{
+    <h4>Teams:</h4><br/>
+    <ul>
+        @foreach (var team in teams)
+        {
+            <li><a href=@String.Format("/Teams/{0}", team.ID)>@team.TeamName</a></li>
+        }
+    </ul>
+}
+else
+            {
+                <h4>Loading...</h4>
+            }
+
+@code {
+
+    List<TeamModel> teams;
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await teamdb.GetTeams();
+    }
+
+
+}

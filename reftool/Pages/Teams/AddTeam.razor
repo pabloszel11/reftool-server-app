@@ -1,4 +1,4 @@
-﻿@page "/Forms/AddTeam"
+﻿@page "/Teams/Add"
 
 @using DataAccessLibrary
 @using DataAccessLibrary.Models
@@ -73,6 +73,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         teams = await teamdb.GetTeams();
+        newForm.CurrentTeams = teams;
         //specificTeam = await teamdb.GetTeamID("Chicago Bulls");
 
         //  Console.WriteLine(specificTeam[0].ID);

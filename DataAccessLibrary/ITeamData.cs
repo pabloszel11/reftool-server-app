@@ -7,7 +7,7 @@ namespace DataAccessLibrary
     public interface ITeamData
     {
         Task<List<TeamModel>> GetTeamID(string teamName);
-        Task<List<TeamModel>> GetTeamName(string id);
+        Task<List<TeamModel>> GetTeam(string id);
         Task<List<TeamModel>> GetTeams();
         Task InsertTeam(TeamModel player);
     }

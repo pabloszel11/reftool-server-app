@@ -31,9 +31,9 @@ namespace DataAccessLibrary
             return this.db.SaveData(sql, player);
         }
 
-        public Task<List<TeamModel>> GetTeamName(string id)
+        public Task<List<TeamModel>> GetTeam(string id)
         {
-            string sql = String.Format("select ID from dbo.Teams where ID='{0}';", id);
+            string sql = String.Format("select * from dbo.Teams where ID={0};", id);
             return this.db.LoadData<TeamModel, dynamic>(sql, new { });
         }
 
