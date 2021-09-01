@@ -128,6 +128,11 @@ using reftool_blazor_server.Models;
         teams = await teamdb.GetTeams();
     }
 
+    async Task deleteTeam(TeamModel team)
+    {
+        await teamdb.DeleteTeam(team);
+    }
+
 
 
 #line default

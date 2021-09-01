@@ -21,7 +21,7 @@ namespace reftool_blazor_server.Data.Game
             PlayerTeam = t;
             Stats = new PlayerStats(this, PlayerTeam);
         }
-
+        //For the UI
         public Blazorise.IconName ArrowActive()
         {
             if (this.active)
@@ -29,7 +29,7 @@ namespace reftool_blazor_server.Data.Game
             else
                 return Blazorise.IconName.ArrowUp;
         }
-
+        //For the substition functionality
         public void SwitchActive()
         {
             if(this.Stats.Fouls < 5)

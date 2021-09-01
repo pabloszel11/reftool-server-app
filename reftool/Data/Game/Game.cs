@@ -23,7 +23,7 @@ namespace reftool_blazor_server.Data.Game
             clock = new Clock();
             quarter = 1;
         }
-
+        //Increments quarter when time for one expires and acts accordingly
         public void incQuarter()
         {
             quarter += 1;
@@ -54,7 +54,7 @@ namespace reftool_blazor_server.Data.Game
             }
             return gameOver;
         }
-
+        //For the UI
         public string GetQuarterLabel()
         {
             if (gameOver)
@@ -64,7 +64,7 @@ namespace reftool_blazor_server.Data.Game
             else
                 return String.Format("{0}OT", this.quarter - 4);
         }
-
+        //Increases current active players' Time in the Stats
         public void IncActPlayersTime(int ms)
         {
             foreach(Player p in this.teamHome.Players)
@@ -78,7 +78,7 @@ namespace reftool_blazor_server.Data.Game
                     p.Stats.IncTim(ms);
             }
         }
-
+        //Check if there's correct amount of players on the floor (active)
         public bool RightAmountOfPlayers()
         {
             int counter1 = 0,

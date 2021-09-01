@@ -22,7 +22,7 @@ SELECT @PlayerTeamId = [ID] FROM Teams WHERE TeamName='Chicago Bulls';
 INSERT INTO Players(FirstName, LastName, Number, TeamId) VALUES
     ('Lonzo', 'Ball', 2, @PlayerTeamId),
     ('Alex', 'Caruso', 4, @PlayerTeamId),
-    ('Zach',, 'Lavine', 8, @PlayerTeamId),
+    ('Zach', 'Lavine', 8, @PlayerTeamId),
     ('Lauri', 'Markkanen', 24, @PlayerTeamId),
     ('Ryan', 'Arcidiacono', 51, @PlayerTeamId),
     ('Nikola', 'Vucevic', 9, @PlayerTeamId),

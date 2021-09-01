@@ -4,7 +4,7 @@
 #pragma warning disable 0649
 #pragma warning disable 0169
 
-namespace reftool_blazor_server.Components
+namespace reftool_blazor_server.Pages.Players
 {
     #line hidden
     using System;
@@ -89,13 +89,88 @@ using Blazorise;
 #line default
 #line hidden
 #nullable disable
-    public partial class AddShotDialog : Microsoft.AspNetCore.Components.ComponentBase
+#nullable restore
+#line 3 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Players\EditPlayer.razor"
+using DataAccessLibrary.Models;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 4 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Players\EditPlayer.razor"
+using DataAccessLibrary;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 5 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Players\EditPlayer.razor"
+using reftool_blazor_server.Models;
+
+#line default
+#line hidden
+#nullable disable
+    [Microsoft.AspNetCore.Components.RouteAttribute("/Players/Edit/{id:int}")]
+    public partial class EditPlayer : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 37 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Players\EditPlayer.razor"
+       
+    [Parameter]
+    public int Id { get; set; }
+
+    List<PlayerModel> players;
+    TeamModel team;
+    bool validNumber = true;
+    PlayerModel player;
+    PlayerFormModel editForm = new PlayerFormModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        players = await playerdb.GetPlayer(Id.ToString());
+        player = players[0];
+
+
+        editForm.FirstName = player.FirstName;
+        editForm.LastName = player.LastName;
+        editForm.Number = player.Number;
+    }
+
+    public async Task Update()
+    {
+        team = new TeamModel()
+        {
+            TeamPlayers = await playerdb.GetPlayersFromTeam(player.TeamID.ToString())
+        };
+        PlayerModel updatedPlayer = new PlayerModel()
+        {
+            ID = Id,
+            FirstName = editForm.FirstName,
+            LastName = editForm.LastName,
+            Number = editForm.Number
+        };
+        if (team.TeamPlayers.Exists(p => p.Number == updatedPlayer.Number))
+            validNumber = false;
+        else
+        {
+            validNumber = true;
+            await playerdb.UpdatePlayer(updatedPlayer);
+            NavManager.NavigateTo(String.Format("/Teams/{0}", player.TeamID));
+        }
+
+    }
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager NavManager { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IPlayerData playerdb { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private ITeamData teamdb { get; set; }
     }
 }
 #pragma warning restore 1591

@@ -8,6 +8,7 @@ using System.IO;
 
 namespace reftool_blazor_server.Data
 {
+    //For creating post-match report
     public static class ExportToPdf
     {
         static List<string> headers = new List<string>(new string[] { 
@@ -29,9 +30,6 @@ namespace reftool_blazor_server.Data
         public static void DefineStyle(Document document)
         {
             Style style = document.Styles["Normal"];
-            // Because all styles are derived from Normal, the next line changes the 
-            // font of the whole document. Or, more exactly, it changes the font of
-            // all styles and paragraphs that do not redefine the font.
             style.Font.Name = "Verdana";
 
             style = document.Styles[StyleNames.Header];
@@ -40,12 +38,10 @@ namespace reftool_blazor_server.Data
             style = document.Styles[StyleNames.Footer];
             style.ParagraphFormat.AddTabStop("8cm", TabAlignment.Center);
 
-            // Create a new style called Table based on style Normal
             style = document.Styles.AddStyle("Table", "Normal");
             style.Font.Name = "Verdana";
             style.Font.Size = 9;
 
-            // Create a new style called Reference based on style Normal
             style = document.Styles.AddStyle("Reference", "Normal");
             style.ParagraphFormat.SpaceBefore = "5mm";
             style.ParagraphFormat.SpaceAfter = "5mm";
@@ -57,7 +53,6 @@ namespace reftool_blazor_server.Data
             Document document = new Document();
             document.Info.Title = "Report";
 
-            // Create an empty page
             Section section = document.AddSection();
 
             Paragraph paragraphDate = section.Headers.Primary.AddParagraph();
@@ -103,7 +98,6 @@ namespace reftool_blazor_server.Data
 
 
 
-            // Save the document...
             MemoryStream stream = new MemoryStream();
             DocumentRenderer renderer = new DocumentRenderer(document);
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer();
@@ -111,10 +105,6 @@ namespace reftool_blazor_server.Data
             pdfRenderer.RenderDocument();
             pdfRenderer.PdfDocument.Save(stream, false);
             return stream;
-            //return document.Save(filename);
-            // ...and start a viewer.
-
-            //return document.ToString();
 
         }
 

@@ -13,7 +13,7 @@
     <ul>
         @foreach (var team in teams)
         {
-            <li><a href=@String.Format("/Teams/{0}", team.ID)>@team.TeamName</a></li>
+        <li><a href=@String.Format("/Teams/{0}", team.ID)>@team.TeamName</a> <a href="/Teams/Edit/@team.ID">Edit</a>  <Icon Name="IconName.Delete" @onclick="@(() => deleteTeam(@team))"></Icon></li>
         }
     </ul>
 }
@@ -28,6 +28,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         teams = await teamdb.GetTeams();
+    }
+
+    async Task deleteTeam(TeamModel team)
+    {
+        await teamdb.DeleteTeam(team);
     }
 
 

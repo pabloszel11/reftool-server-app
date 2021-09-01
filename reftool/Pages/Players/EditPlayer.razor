@@ -1,0 +1,81 @@
+﻿@page "/Players/Edit/{id:int}"
+
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using reftool_blazor_server.Models
+
+@inject ITeamData teamdb
+@inject IPlayerData playerdb
+@inject NavigationManager NavManager
+
+@if (player == null || players.Count != 1)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    <EditForm Model="@editForm" OnValidSubmit="@Update">
+        <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+        @if(!validNumber)
+        {
+            <h6 style="color: darkred">Number exists in the team</h6>
+        }
+        <DataAnnotationsValidator />
+        <InputNumber id="playerNo" @bind-Value="editForm.Number" />
+        <InputText id="playerFirstName" @bind-Value="editForm.FirstName" />
+        <InputText id="playerLastName" @bind-Value="editForm.LastName" />
+        <br />
+        <br />
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    List<PlayerModel> players;
+    TeamModel team;
+    bool validNumber = true;
+    PlayerModel player;
+    PlayerFormModel editForm = new PlayerFormModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        players = await playerdb.GetPlayer(Id.ToString());
+        player = players[0];
+
+
+        editForm.FirstName = player.FirstName;
+        editForm.LastName = player.LastName;
+        editForm.Number = player.Number;
+    }
+
+    public async Task Update()
+    {
+        team = new TeamModel()
+        {
+            TeamPlayers = await playerdb.GetPlayersFromTeam(player.TeamID.ToString())
+        };
+        PlayerModel updatedPlayer = new PlayerModel()
+        {
+            ID = Id,
+            FirstName = editForm.FirstName,
+            LastName = editForm.LastName,
+            Number = editForm.Number
+        };
+        if (team.TeamPlayers.Exists(p => p.Number == updatedPlayer.Number))
+            validNumber = false;
+        else
+        {
+            validNumber = true;
+            await playerdb.UpdatePlayer(updatedPlayer);
+            NavManager.NavigateTo(String.Format("/Teams/{0}", player.TeamID));
+        }
+
+    }
+}

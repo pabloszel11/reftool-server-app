@@ -130,9 +130,6 @@ using reftool_blazor_server.Models;
     {
         teams = await teamdb.GetTeams();
         newForm.CurrentTeams = teams;
-        //specificTeam = await teamdb.GetTeamID("Chicago Bulls");
-
-        //  Console.WriteLine(specificTeam[0].ID);
     }
 
     public async Task Insert()

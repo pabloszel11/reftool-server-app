@@ -63,9 +63,28 @@ tr {
     font-size: 12px;
 }
 
+.menuIcon {
+    width: 220px;
+    height: 220px;
+    border-radius: 10px;
+    margin: 50px;
+    transition: all .2s ease-in-out; }
+
+.menuIcon:hover {
+
+    transform: scale(1.1);
+}
 input[type=number] {
     width: 10%;
     box-sizing: border-box;
+}
+
+td{
+    transition: all .2s ease-in-out;
+}
+td:hover {
+    cursor: pointer;
+    transform: scale(1.05);
 }
 
 #blazor-error-ui {

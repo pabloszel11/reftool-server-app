@@ -8,34 +8,54 @@
 
 @if (team != null)
 {
-    <h2>@team.TeamName</h2><br/>
-    @foreach (var player in team.TeamPlayers)
-    {
-        <h6>#@player.Number @player.FirstName @player.LastName</h6>
+    <h2>@team.TeamName</h2><a href="/Teams/Edit/@team.ID">Edit</a><Icon Name="IconName.Delete" @onclick="@(() => deleteTeam(@team))"></Icon>
         <br />
-    }
-    <a href="/Teams">Go Back</a>
-}
-else
-{
-    <h4>There is no team with the given id!</h4>
-}
+        @foreach (var player in team.TeamPlayers)
+        {
+            <h6>
+                #@player.Number @player.FirstName @player.LastName <a href="/Players/Edit/@player.ID">Edit</a>
+                @if (team.TeamPlayers.Count > 5)
+                {
+                    <Icon Name="IconName.Delete" @onclick="@(() => deletePlayer(@player))"></Icon>
+                }
+            </h6>
+            <br />
+        }
+
+        if(team.TeamPlayers.Count < 12)
+        {
+        <h6><a href="/Players/Add/@Id">Add a new player</a></h6><br />
+        }
+        <a href="/Teams">Go Back</a>
+        }
+        else
+        {
+        <h4>There is no team with the given id!</h4>
+        }
 
 
-@code {
-    [Parameter]
-    public int Id { get; set; }
+        @code {
+            [Parameter]
+            public int Id { get; set; }
 
-    List<TeamModel> teamList;
-    TeamModel team;
-    List<PlayerModel> players;
+            List<TeamModel> teamList;
+            TeamModel team;
+            List<PlayerModel> players;
 
-    protected override async Task OnInitializedAsync()
-    {
-        teamList = await teamdb.GetTeam(Id.ToString());
-        players = await playerdb.GetPlayersFromTeam(Id.ToString());
-        team = new TeamModel();
-        team.TeamName = teamList[0].TeamName;
-        team.TeamPlayers = players;
-    }
-}
+            protected override async Task OnInitializedAsync()
+            {
+                teamList = await teamdb.GetTeam(Id.ToString());
+                players = await playerdb.GetPlayersFromTeam(Id.ToString());
+                team = new TeamModel();
+                team.TeamName = teamList[0].TeamName;
+                team.TeamPlayers = players;
+            }
+            async Task deletePlayer(PlayerModel player)
+            {
+                await playerdb.DeletePlayer(player);
+            }
+            async Task deleteTeam(TeamModel team)
+            {
+                await teamdb.DeleteTeam(team);
+            }
+        }

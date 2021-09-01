@@ -1,15 +1,15 @@
-﻿using System;
+﻿using DataAccessLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLibrary.Models
+namespace reftool_blazor_server.Models
 {
-    public class PlayerModel
+    class PlayerFormModel
     {
-        public int ID { get; set; }
         public int Number { get; set; }
         [StringLength(12, ErrorMessage = "First name of one of the players is too long")]
         [MinLength(3, ErrorMessage = "First name of one of the players is too short")]
@@ -17,6 +17,5 @@ namespace DataAccessLibrary.Models
         [StringLength(25, ErrorMessage = "Last name of one of the players is too long")]
         [MinLength(3, ErrorMessage = "Last name of one of the players is too short")]
         public string LastName { get; set; }
-        public int TeamID { get; set; }
     }
 }

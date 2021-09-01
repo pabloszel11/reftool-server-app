@@ -24,7 +24,6 @@ namespace reftool_blazor_server.Models
 
         public TeamFormModel()
         {
-            PlayerModel p = new PlayerModel();
             this.Players = new List<PlayerModel>();
             for(int i = 0; i < 12; i++)
             {

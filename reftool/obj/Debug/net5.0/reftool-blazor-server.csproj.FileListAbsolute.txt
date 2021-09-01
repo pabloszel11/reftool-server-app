@@ -254,11 +254,6 @@ C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\reftool-blazor-serve
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\reftool-blazor-server.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\reftool-blazor-server.RazorComponent.input.cache
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\App.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Components\AddShotDialog.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Components\ExportToPdf.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Clock.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Counter.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\FetchData.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Forms\Players.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Game.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Index.razor.g.cs
@@ -272,11 +267,6 @@ C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\reftool-blazor-serve
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\reftool-blazor-server.TagHelpers.output.cache
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\reftool-blazor-server.RazorCoreGenerate.cache
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\App.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Components\AddShotDialog.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Components\ExportToPdf.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Clock.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Counter.razor.g.cs
-C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\FetchData.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Forms\Players.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Game.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Index.razor.g.cs
@@ -308,3 +298,11 @@ C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Teams\Ad
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Teams\DisplayTeam.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Teams\ListTeams.razor.g.cs
 C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Teams\ListTeams.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Players\EditPlayer.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Players\EditPlayer.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Players\AddPlayer.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Players\AddPlayer.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Pages\Teams\EditTeam.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Pages\Teams\EditTeam.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\RazorDeclaration\Components\Tutorial.razor.g.cs
+C:\Users\C5315422\Downloads\thesis\reftool\obj\Debug\net5.0\Razor\Components\Tutorial.razor.g.cs

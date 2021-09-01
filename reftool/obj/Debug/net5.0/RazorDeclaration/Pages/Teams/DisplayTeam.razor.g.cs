@@ -112,23 +112,32 @@ using DataAccessLibrary;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 25 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Teams\DisplayTeam.razor"
-       
-    [Parameter]
-    public int Id { get; set; }
+#line 37 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Teams\DisplayTeam.razor"
+               
+            [Parameter]
+            public int Id { get; set; }
 
-    List<TeamModel> teamList;
-    TeamModel team;
-    List<PlayerModel> players;
+            List<TeamModel> teamList;
+            TeamModel team;
+            List<PlayerModel> players;
 
-    protected override async Task OnInitializedAsync()
-    {
-        teamList = await teamdb.GetTeam(Id.ToString());
-        players = await playerdb.GetPlayersFromTeam(Id.ToString());
-        team = new TeamModel();
-        team.TeamName = teamList[0].TeamName;
-        team.TeamPlayers = players;
-    }
+            protected override async Task OnInitializedAsync()
+            {
+                teamList = await teamdb.GetTeam(Id.ToString());
+                players = await playerdb.GetPlayersFromTeam(Id.ToString());
+                team = new TeamModel();
+                team.TeamName = teamList[0].TeamName;
+                team.TeamPlayers = players;
+            }
+            async Task deletePlayer(PlayerModel player)
+            {
+                await playerdb.DeletePlayer(player);
+            }
+            async Task deleteTeam(TeamModel team)
+            {
+                await teamdb.DeleteTeam(team);
+            }
+        
 
 #line default
 #line hidden

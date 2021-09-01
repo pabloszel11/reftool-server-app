@@ -1,0 +1,78 @@
+﻿@page "/Players/Add/{id:int}"
+
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using reftool_blazor_server.Models
+
+@inject ITeamData teamdb
+@inject IPlayerData playerdb
+@inject NavigationManager NavManager
+
+@if (teams != null)
+{
+    <h3>Adding player to @teams[0].TeamName</h3>
+
+    <EditForm Model="@newForm" OnValidSubmit="@Insert">
+        <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+        @if (!validNumber)
+        {
+            <h6 style="color: darkred">Number exists in the team</h6>
+        }
+        <DataAnnotationsValidator />
+        <InputNumber id="playerNo" @bind-Value="newForm.Number" />
+        <InputText id="playerFirstName" @bind-Value="newForm.FirstName" />
+        <InputText id="playerLastName" @bind-Value="newForm.LastName" />
+        <br />
+        <br />
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+
+    </EditForm>
+}
+else
+{
+    <h3>Loading...</h3>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    List<TeamModel> teams;
+    TeamModel team;
+    PlayerFormModel newForm = new PlayerFormModel();
+    bool validNumber = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await teamdb.GetTeam(Id.ToString());
+    }
+
+    public async Task Insert()
+    {
+        team = new TeamModel()
+        {
+            TeamPlayers = await playerdb.GetPlayersFromTeam(Id.ToString())
+        };
+
+
+
+        PlayerModel insertedPlayer = new PlayerModel()
+        {
+            TeamID = Id,
+            FirstName = newForm.FirstName,
+            LastName = newForm.LastName,
+            Number = newForm.Number
+        };
+        if (team.TeamPlayers.Exists(p => p.Number == insertedPlayer.Number))
+            validNumber = false;
+        else
+        {
+            await playerdb.InsertPlayer(insertedPlayer);
+            NavManager.NavigateTo(String.Format("/Teams/{0}", Id.ToString()));
+        }
+
+    }
+}

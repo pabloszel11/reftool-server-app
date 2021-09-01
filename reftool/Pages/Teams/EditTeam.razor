@@ -1,0 +1,63 @@
+﻿@page "/Teams/Edit/{id:int}"
+
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using reftool_blazor_server.Models
+
+@inject ITeamData teamdb
+@inject IPlayerData playerdb
+@inject NavigationManager NavManager
+
+<EditForm Model="@editForm" OnValidSubmit="@Update">
+    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+    <DataAnnotationsValidator />
+
+    <table class="table table-striped">
+        <tr style="display:inline">
+            <td>
+                <InputText id="teamName" @bind-Value="editForm.TeamName" />
+            </td>
+        </tr>
+    </table>
+    <br />
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private List<TeamModel> teams;
+    private List<PlayerModel> players;
+    private TeamModel specificTeam;
+
+    private TeamFormModel editForm = new TeamFormModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await teamdb.GetTeam(Id.ToString());
+        players = await playerdb.GetPlayersFromTeam(Id.ToString());
+        editForm.TeamName = teams[0].TeamName;
+    }
+
+    public async Task Update()
+    {
+        TeamModel team = new TeamModel()
+        {
+            ID = Id,
+            TeamName = editForm.TeamName
+        };
+        await teamdb.UpdateTeam(team);
+
+        specificTeam = new TeamModel()
+        {
+            TeamName = editForm.TeamName
+        };
+        NavManager.NavigateTo(String.Format("/Teams/"));
+    }
+
+}

@@ -168,44 +168,23 @@ using reftool_blazor_server.Pages;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 292 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 289 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
  
+    #region Declarations
     [Inject] IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+    [Inject] Append.Blazor.Notifications.INotificationService NotificationService { get; set; }
     Team t1;
     Team t2;
     System.Collections.Stack methods;
-    Alert myAlert;
-    TeamModel homeTeam, awayTeam;
     int homeTeamId, awayTeamId;
     reftool_blazor_server.Data.Game.Game g;
-    MemoryStream s;
     List<TeamModel> availableTeams;
     bool sameTeams;
+    private static System.Timers.Timer timer;
 
+    #endregion
 
-    protected override async Task OnInitializedAsync()
-    {
-        methods = new System.Collections.Stack();
-        sameTeams = false;
-        availableTeams = await teamdb.GetTeams();
-        if (t1 != null && t2 != null)
-            g = new reftool_blazor_server.Data.Game.Game(t1, t2);
-
-        //s = reftool_blazor_server.Data.ExportToPdf.GenerateReport(g);
-    }
-
-
-    Task OnClicked()
-    {
-        modalRef.Hide();
-
-        return Task.CompletedTask;
-    }
-
-    Modal modalRef;
-    [Inject] Append.Blazor.Notifications.INotificationService NotificationService { get; set; }
-
-
+    #region Notifications
     async Task ShowWarningNotificationWithBool(Action<bool> myMethod, Player item, bool value)
     {
         if (!item.active)
@@ -236,25 +215,16 @@ using reftool_blazor_server.Pages;
                 {
                     item.active = false;
                     await ShowWarningNotification("Player has fouled out!");
-                    if (item.PlayerTeam.Stats.OverLimit())
-                        await ShowWarningNotification(String.Format("{0} are over the foul limit, free throws should be awarded", item.PlayerTeam.Name));
-
                 }
+                if (item.PlayerTeam.Stats.OverLimit())
+                    await ShowWarningNotification(String.Format("{0} are over the foul limit, free throws should be awarded", item.PlayerTeam.Name));
+
 
             }
         }
 
     }
 
-    void undoLastAction()
-    {
-        List<object> action = (List<object>)methods.Pop();
-        System.Reflection.MethodInfo methodInfo = (System.Reflection.MethodInfo)action[0];
-        Player p = (Player)action[1];
-        bool value = (bool)action[2];
-
-        methodInfo.Invoke(null, new object[] { p.Stats, value });
-    }
 
     async Task ShowWarningNotificationWithoutBool(Action myMethod, Player item)
     {
@@ -289,22 +259,9 @@ using reftool_blazor_server.Pages;
 
         await NotificationService.CreateAsync("Warning", options);
     }
+    #endregion
 
-
-    public static string Base64Encode(string plainText)
-    {
-        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-        return System.Convert.ToBase64String(plainTextBytes);
-    }
-
-
-    //static Team t1 = generate();
-    // static Team t2 = generate2();
-
-
-    private static System.Timers.Timer timer;
-
-
+    #region Clock
     public async void ToggleTimer()
     {
         if (!g.RightAmountOfPlayers())
@@ -356,6 +313,19 @@ using reftool_blazor_server.Pages;
         }
     }
 
+    #endregion
+
+    #region Initialize
+    protected override async Task OnInitializedAsync()
+    {
+        methods = new System.Collections.Stack();
+        sameTeams = false;
+        availableTeams = await teamdb.GetTeams();
+        if (t1 != null && t2 != null)
+            g = new reftool_blazor_server.Data.Game.Game(t1, t2);
+
+    }
+
     public async void assignTeams()
     {
         if (homeTeamId == awayTeamId)
@@ -392,6 +362,18 @@ using reftool_blazor_server.Pages;
         await InvokeAsync(StateHasChanged);
 
     }
+    #endregion
+
+    void undoLastAction()
+    {
+        List<object> action = (List<object>)methods.Pop();
+        System.Reflection.MethodInfo methodInfo = (System.Reflection.MethodInfo)action[0];
+        Player p = (Player)action[1];
+        bool value = (bool)action[2];
+
+        methodInfo.Invoke(null, new object[] { p.Stats, value });
+    }
+
 
 #line default
 #line hidden
