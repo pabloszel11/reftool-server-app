@@ -1,11 +1,11 @@
 CREATE DATABASE reftooldb;
 
-CREATE TABLE Teams (
+CREATE TABLE reftooldb.dbo.Teams (
     ID int IDENTITY(1,1) PRIMARY KEY,
     TeamName varchar(MAX) NOT NULL
 );
 
-CREATE TABLE Players (
+CREATE TABLE reftooldb.dbo.Players (
     ID int IDENTITY(1,1) PRIMARY KEY,
     FirstName varchar(MAX),
     LastName varchar(MAX),
@@ -13,13 +13,13 @@ CREATE TABLE Players (
     TeamId int NOT NULL FOREIGN KEY REFERENCES Teams(ID),
 );
 
-INSERT INTO Teams(TeamName) VALUES ('Chicago Bulls');
-INSERT INTO Teams(TeamName) VALUES ('Milwaukee Bucks');
+INSERT INTO reftooldb.dbo.Teams(TeamName) VALUES ('Chicago Bulls');
+INSERT INTO reftooldb.dbo.Teams(TeamName) VALUES ('Milwaukee Bucks');
 
 DECLARE @PlayerTeamId AS int;
-SELECT @PlayerTeamId = [ID] FROM Teams WHERE TeamName='Chicago Bulls';
+SELECT @PlayerTeamId = [ID] FROM reftooldb.dbo.Teams WHERE TeamName='Chicago Bulls';
 
-INSERT INTO Players(FirstName, LastName, Number, TeamId) VALUES
+INSERT INTO reftooldb.dbo.Players(FirstName, LastName, Number, TeamId) VALUES
     ('Lonzo', 'Ball', 2, @PlayerTeamId),
     ('Alex', 'Caruso', 4, @PlayerTeamId),
     ('Zach', 'Lavine', 8, @PlayerTeamId),
@@ -29,9 +29,9 @@ INSERT INTO Players(FirstName, LastName, Number, TeamId) VALUES
     ('Coby', 'White', 0, @PlayerTeamId),
     ('Patrick', 'Williams', 44, @PlayerTeamId);
 
-SELECT @PlayerTeamId = [ID] FROM Teams WHERE TeamName='Milwaukee Bucks';
+SELECT @PlayerTeamId = [ID] FROM reftooldb.dbo.Teams WHERE TeamName='Milwaukee Bucks';
 
-INSERT INTO Players(FirstName, LastName, Number, TeamId) VALUES
+INSERT INTO reftooldb.dbo.Players(FirstName, LastName, Number, TeamId) VALUES
     ('Giannis', 'Antetokounmpo', 34, @PlayerTeamId),
     ('Thanasis', 'Antetokounmpo', 43, @PlayerTeamId),
     ('Pat','Connaughton', 24, @PlayerTeamId),
