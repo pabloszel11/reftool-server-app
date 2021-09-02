@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace reftool_blazor_server.Data.Game
 {
+    /// <summary>
+    /// Class for managing game
+    /// </summary>
     public class Game
     {
         public Clock clock;
@@ -23,7 +26,9 @@ namespace reftool_blazor_server.Data.Game
             clock = new Clock();
             quarter = 1;
         }
-        //Increments quarter when time for one expires and acts accordingly
+        /// <summary>
+        /// Increments quarter and if the game is over or should go to overtime, acts accordingly
+        /// </summary>
         public void incQuarter()
         {
             quarter += 1;
@@ -37,12 +42,18 @@ namespace reftool_blazor_server.Data.Game
             }
             
         }
-
+        /// <summary>
+        /// Getter
+        /// </summary>
+        /// <returns>Is overtime</returns>
         public bool IsOvertime()
         {
             return overtime;
         }
-
+        /// <summary>
+        /// Getter with added function of disactivating players if game is over
+        /// </summary>
+        /// <returns>Is game over</returns>
         public bool IsOver()
         {
             if(gameOver)
@@ -54,7 +65,10 @@ namespace reftool_blazor_server.Data.Game
             }
             return gameOver;
         }
-        //For the UI
+        /// <summary>
+        /// Used for the UI
+        /// </summary>
+        /// <returns>Label of the current quarter/overtime to be printed</returns>
         public string GetQuarterLabel()
         {
             if (gameOver)
@@ -64,7 +78,10 @@ namespace reftool_blazor_server.Data.Game
             else
                 return String.Format("{0}OT", this.quarter - 4);
         }
-        //Increases current active players' Time in the Stats
+        /// <summary>
+        /// Increases current active players time in the stats
+        /// </summary>
+        /// <param name="ms">Time in miliseconds</param>
         public void IncActPlayersTime(int ms)
         {
             foreach(Player p in this.teamHome.Players)
@@ -78,7 +95,10 @@ namespace reftool_blazor_server.Data.Game
                     p.Stats.IncTim(ms);
             }
         }
-        //Check if there's correct amount of players on the floor (active)
+        /// <summary>
+        /// Check if there's a correct number of players on the floor (active)
+        /// </summary>
+        /// <returns>Is correct number of players</returns>
         public bool RightAmountOfPlayers()
         {
             int counter1 = 0,
@@ -96,12 +116,18 @@ namespace reftool_blazor_server.Data.Game
 
             return counter1 == 5 && counter2 == 5;
         }
-
+        /// <summary>
+        /// Getter
+        /// </summary>
+        /// <returns>Home team object</returns>
         public Team GetHomeTeam()
         {
             return teamHome;
         }
-
+        /// <summary>
+        /// Getter
+        /// </summary>
+        /// <returns>Away team object</returns>
         public Team GetAwayTeam()
         {
             return teamAway;

@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\reftool",
+    "\\reftool\\Data",
+    "\\reftool\\Data\\Game",
+    "\\reftool\\Pages",
+    "\\reftool\\Pages\\Players"
   ],
-  "SelectedNode": "\\Local settings (.vs)",
+  "SelectedNode": "\\reftool\\Pages\\Game.razor",
   "PreviewInSolutionExplorer": false
 }

@@ -262,7 +262,7 @@ using reftool_blazor_server.Pages;
     #endregion
 
     #region Clock
-    public async void ToggleTimer()
+    async void ToggleTimer()
     {
         if (!g.RightAmountOfPlayers())
         {
@@ -285,8 +285,7 @@ using reftool_blazor_server.Pages;
         }
 
     }
-
-    public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
     {
 
         if (g.clock.GetGameTime() > 0)
@@ -304,7 +303,7 @@ using reftool_blazor_server.Pages;
         InvokeAsync(StateHasChanged);
     }
 
-    public void iterate(int scale)
+    void iterate(int scale)
     {
         foreach (Player p in t1.Players)
         {
@@ -326,7 +325,7 @@ using reftool_blazor_server.Pages;
 
     }
 
-    public async void assignTeams()
+    async void assignTeams()
     {
         if (homeTeamId == awayTeamId)
         {

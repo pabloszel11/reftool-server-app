@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace reftool_blazor_server.Data.Game
 {
+    /// <summary>
+    /// Class for team in game
+    /// </summary>
     public class Team
     {
         public string Name;

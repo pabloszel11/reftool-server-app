@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace reftool_blazor_server.Data.Game
 {
+    /// <summary>
+    /// Class representing a player in the game
+    /// </summary>
     public class Player
     {
         public string Name, Surname;
@@ -21,7 +24,10 @@ namespace reftool_blazor_server.Data.Game
             PlayerTeam = t;
             Stats = new PlayerStats(this, PlayerTeam);
         }
-        //For the UI
+        /// <summary>
+        /// For the UI to properly display arrow to substitute players
+        /// </summary>
+        /// <returns>Arrow type</returns>
         public Blazorise.IconName ArrowActive()
         {
             if (this.active)
@@ -29,7 +35,9 @@ namespace reftool_blazor_server.Data.Game
             else
                 return Blazorise.IconName.ArrowUp;
         }
-        //For the substition functionality
+        /// <summary>
+        /// Switches activation of a player for substitution functionality (uses XOR)
+        /// </summary>
         public void SwitchActive()
         {
             if(this.Stats.Fouls < 5)
