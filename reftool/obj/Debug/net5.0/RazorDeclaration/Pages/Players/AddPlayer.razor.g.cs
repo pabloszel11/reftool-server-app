@@ -134,7 +134,7 @@ using reftool_blazor_server.Models;
         teams = await teamdb.GetTeam(Id.ToString());
     }
 
-    public async Task Insert()
+    async Task Insert()
     {
         team = new TeamModel()
         {

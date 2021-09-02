@@ -98,62 +98,55 @@ using System.Diagnostics;
 #nullable disable
 #nullable restore
 #line 4 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
-using reftool_blazor_server.Components;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 5 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using reftool_blazor_server.Data.Game;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 5 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using Append.Blazor.Notifications;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 6 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using DataAccessLibrary;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 7 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using DataAccessLibrary.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 8 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using BlazorDownloadFile;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 9 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using System.IO;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 10 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using System.Runtime;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 12 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 11 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
 using reftool_blazor_server.Pages;
 
 #line default
@@ -168,7 +161,7 @@ using reftool_blazor_server.Pages;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 289 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
+#line 288 "C:\Users\C5315422\Downloads\thesis\reftool\Pages\Game.razor"
  
     #region Declarations
     [Inject] IBlazorDownloadFileService BlazorDownloadFileService { get; set; }

@@ -8,7 +8,9 @@ using System.IO;
 
 namespace reftool_blazor_server.Data
 {
-    //For creating post-match report
+    /// <summary>
+    /// Class for creating post-match report
+    /// </summary>
     public static class ExportToPdf
     {
         static List<string> headers = new List<string>(new string[] { 
@@ -27,7 +29,7 @@ namespace reftool_blazor_server.Data
             "FLS"
         });
 
-        public static void DefineStyle(Document document)
+        static void DefineStyle(Document document)
         {
             Style style = document.Styles["Normal"];
             style.Font.Name = "Verdana";
@@ -47,7 +49,11 @@ namespace reftool_blazor_server.Data
             style.ParagraphFormat.SpaceAfter = "5mm";
             style.ParagraphFormat.TabStops.AddTabStop("16cm", TabAlignment.Right);
         }
-
+        /// <summary>
+        /// Main generate report method
+        /// </summary>
+        /// <param name="g">Game object</param>
+        /// <returns>MemoryStream to download file</returns>
         public static MemoryStream GenerateReport(reftool_blazor_server.Data.Game.Game g)
         {
             Document document = new Document();
@@ -108,7 +114,7 @@ namespace reftool_blazor_server.Data
 
         }
 
-        public static void AddColumns(Table table)
+        static void AddColumns(Table table)
         {
             Column column = table.AddColumn("5cm");
             column.Format.Alignment = ParagraphAlignment.Left;
@@ -144,7 +150,7 @@ namespace reftool_blazor_server.Data
             column.Format.Alignment = ParagraphAlignment.Left;
         }
 
-        public static void AddHeaders(Table table)
+        static void AddHeaders(Table table)
         {
             Row row = table.AddRow();
             row.HeadingFormat = true;
@@ -157,7 +163,7 @@ namespace reftool_blazor_server.Data
             }
         }
 
-        public static void AddTeam(Table table, Team team)
+        static void AddTeam(Table table, Team team)
         {
             foreach(Player p in team.Players)
             {
@@ -202,7 +208,7 @@ namespace reftool_blazor_server.Data
 
         }
 
-        public static double GetDivisor(int value)
+        static double GetDivisor(int value)
         {
             if (value == 0)
                 value = 1;

@@ -141,7 +141,7 @@ using reftool_blazor_server.Models;
         editForm.Number = player.Number;
     }
 
-    public async Task Update()
+    async Task Update()
     {
         team = new TeamModel()
         {
