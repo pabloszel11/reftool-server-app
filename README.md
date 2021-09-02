@@ -15,8 +15,8 @@ Installation process:
 2. Go to repo directory on your local machine.
 3. Initialize database using provided SQL script by running
 
-	sqlcmd -S <your_server_name> -i initialize-reftool.sql
+		sqlcmd -S <your_server_name> -i initialize-reftool.sql
 4. Modify file appsettings.json so the ConnectionString has settings for your environment. In Data Source section put your server name, in Initial Catalog put the name of the database (reftool by default).
 5. Run command
 
-	dotnet run
+		dotnet run
