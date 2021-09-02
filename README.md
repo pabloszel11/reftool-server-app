@@ -20,3 +20,5 @@ Installation process:
 5. Run command
 
 		dotnet run
+		
+![gameview](https://user-images.githubusercontent.com/19887441/131915687-0a33e59c-74d7-40b7-ae06-8f1b40b12abe.PNG)
